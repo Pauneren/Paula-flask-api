@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
+from flask import render_template
 
 from security import authenticate, identity
 from resources.user import UserRegister
@@ -15,7 +16,7 @@ app.config['DEBUG'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'jose'
+app.secret_key = 'oursupersecretkeyhocuspocus'
 api = Api(app)
 
 jwt = JWT(app, authenticate, identity)  # /auth
@@ -26,6 +27,10 @@ api.add_resource(ItemList, '/items')
 api.add_resource(StoreList, '/stores')
 
 api.add_resource(UserRegister, '/register')
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 if __name__ == '__main__':
     from db import db
